@@ -127,6 +127,7 @@ bool CCDirector::init(void)
     m_pFPSLabel = NULL;
     m_pSPFLabel = NULL;
     m_pDrawsLabel = NULL;
+    m_pExtraInfo = NULL;
     m_uTotalFrames = m_uFrames = 0;
     m_pszFPS = new char[10];
     m_pLastUpdate = new struct cc_timeval();
@@ -171,6 +172,7 @@ CCDirector::~CCDirector(void)
     CC_SAFE_RELEASE(m_pFPSLabel);
     CC_SAFE_RELEASE(m_pSPFLabel);
     CC_SAFE_RELEASE(m_pDrawsLabel);
+    CC_SAFE_RELEASE(m_pExtraInfo);
     
     CC_SAFE_RELEASE(m_pRunningScene);
     CC_SAFE_RELEASE(m_pNotificationNode);
@@ -696,6 +698,7 @@ void CCDirector::purgeDirector()
     CC_SAFE_RELEASE_NULL(m_pFPSLabel);
     CC_SAFE_RELEASE_NULL(m_pSPFLabel);
     CC_SAFE_RELEASE_NULL(m_pDrawsLabel);
+    CC_SAFE_RELEASE_NULL(m_pExtraInfo);
 
     // purge bitmap cache
     CCLabelBMFont::purgeCachedData();
@@ -800,7 +803,6 @@ void CCDirector::showStats(void)
 {
     m_uFrames++;
     m_fAccumDt += m_fDeltaTime;
-    
     if (m_bDisplayStats)
     {
         if (m_pFPSLabel && m_pSPFLabel && m_pDrawsLabel)
@@ -824,6 +826,9 @@ void CCDirector::showStats(void)
             m_pDrawsLabel->visit();
             m_pFPSLabel->visit();
             m_pSPFLabel->visit();
+            if (m_pExtraInfo){
+            	m_pExtraInfo->visit();
+            }
         }
     }    
     
@@ -856,6 +861,7 @@ void CCDirector::createStatsLabel()
         CC_SAFE_RELEASE_NULL(m_pFPSLabel);
         CC_SAFE_RELEASE_NULL(m_pSPFLabel);
         CC_SAFE_RELEASE_NULL(m_pDrawsLabel);
+        CC_SAFE_RELEASE_NULL(m_pExtraInfo);
         textureCache->removeTextureForKey("cc_fps_images");
         CCFileUtils::sharedFileUtils()->purgeCachedEntries();
     }
@@ -906,8 +912,14 @@ void CCDirector::createStatsLabel()
     m_pDrawsLabel->initWithString("000", texture, 12, 32, '.');
     m_pDrawsLabel->setScale(factor);
 
+    m_pExtraInfo = new CCLabelAtlas();
+    m_pExtraInfo->setIgnoreContentScaleFactor(true);
+    m_pExtraInfo->initWithString("000", texture, 12, 32, '.');
+    m_pExtraInfo->setScale(factor);
+
     CCTexture2D::setDefaultAlphaPixelFormat(currentFormat);
 
+    m_pExtraInfo->setPosition(ccpAdd(ccp(0, 51*factor), CC_DIRECTOR_STATS_POSITION));
     m_pDrawsLabel->setPosition(ccpAdd(ccp(0, 34*factor), CC_DIRECTOR_STATS_POSITION));
     m_pSPFLabel->setPosition(ccpAdd(ccp(0, 17*factor), CC_DIRECTOR_STATS_POSITION));
     m_pFPSLabel->setPosition(CC_DIRECTOR_STATS_POSITION);
@@ -1018,6 +1030,10 @@ void CCDirector::setAccelerometer(CCAccelerometer* pAccelerometer)
 CCAccelerometer* CCDirector::getAccelerometer()
 {
     return m_pAccelerometer;
+}
+
+CCLabelAtlas* CCDirector::getEntraInfo(void){
+	return m_pExtraInfo;
 }
 
 /***************************************************

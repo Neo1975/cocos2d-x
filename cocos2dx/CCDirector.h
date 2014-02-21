@@ -373,6 +373,7 @@ protected:
     CCLabelAtlas *m_pFPSLabel;
     CCLabelAtlas *m_pSPFLabel;
     CCLabelAtlas *m_pDrawsLabel;
+    CC_PROPERTY_READONLY(CCLabelAtlas*, m_pExtraInfo, EntraInfo);
     
     /** Whether or not the Director is paused */
     bool m_bPaused;
