@@ -23,12 +23,12 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "cocostudio/CocoStudio.h"
-#include "gui/CocosGUI.h"
+#include "ui/CocosGUI.h"
 #include "SimpleAudioEngine.h"
 #include "ObjectFactory.h"
 
 using namespace cocos2d;
-using namespace gui;
+using namespace ui;
 
 namespace cocostudio {
 
